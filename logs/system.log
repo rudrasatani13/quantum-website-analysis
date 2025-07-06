@@ -1,0 +1,38 @@
+2025-07-06 14:23:27,448 - qsaiids.system - ERROR - Component initialization failed: NetworkMonitor.__init__() got an unexpected keyword argument 'interfaces'
+2025-07-06 14:24:25,632 - qsaiids.system - ERROR - Component initialization failed: WebAnalyzer.__init__() got an unexpected keyword argument 'quantum_detector'
+2025-07-06 14:25:29,932 - qsaiids.system - INFO - All components initialized successfully
+2025-07-06 14:25:29,937 - qsaiids.system - INFO - Starting QS-AI-IDS system with real-time monitoring...
+2025-07-06 14:25:29,943 - qsaiids.system - INFO - Started quantum_detector
+2025-07-06 14:25:29,944 - qsaiids.system - INFO - Started network_monitor
+2025-07-06 14:25:29,944 - qsaiids.system - INFO - QS-AI-IDS system started successfully with real-time monitoring
+2025-07-06 14:25:32,660 - qsaiids.system - INFO - Shutting down QS-AI-IDS system...
+2025-07-06 14:25:34,665 - qsaiids.system - INFO - Stopped quantum_detector
+2025-07-06 14:25:34,685 - qsaiids.system - INFO - Stopped network_monitor
+2025-07-06 14:25:34,685 - qsaiids.system - INFO - QS-AI-IDS system shutdown complete
+2025-07-06 14:30:49,251 - qsaiids.system - INFO - All components initialized successfully
+2025-07-06 14:30:49,251 - qsaiids.system - INFO - Starting QS-AI-IDS system with real-time monitoring...
+2025-07-06 14:30:49,253 - qsaiids.system - INFO - Started quantum_detector
+2025-07-06 14:30:49,253 - qsaiids.system - INFO - Started network_monitor
+2025-07-06 14:30:49,253 - qsaiids.system - INFO - QS-AI-IDS system started successfully with real-time monitoring
+2025-07-06 14:30:51,979 - qsaiids.system - INFO - Shutting down QS-AI-IDS system...
+2025-07-06 14:30:53,984 - qsaiids.system - INFO - Stopped quantum_detector
+2025-07-06 14:30:54,019 - qsaiids.system - INFO - Stopped network_monitor
+2025-07-06 14:30:54,019 - qsaiids.system - INFO - QS-AI-IDS system shutdown complete
+2025-07-06 14:31:53,402 - qsaiids.system - INFO - All components initialized successfully
+2025-07-06 14:31:53,402 - qsaiids.system - INFO - Starting QS-AI-IDS system with real-time monitoring...
+2025-07-06 14:31:53,406 - qsaiids.system - INFO - Started quantum_detector
+2025-07-06 14:31:53,407 - qsaiids.system - INFO - Started network_monitor
+2025-07-06 14:31:53,407 - qsaiids.system - INFO - QS-AI-IDS system started successfully with real-time monitoring
+2025-07-06 14:31:56,764 - qsaiids.system - INFO - Shutting down QS-AI-IDS system...
+2025-07-06 14:31:58,769 - qsaiids.system - INFO - Stopped quantum_detector
+2025-07-06 14:31:58,772 - qsaiids.system - INFO - Stopped network_monitor
+2025-07-06 14:31:58,772 - qsaiids.system - INFO - QS-AI-IDS system shutdown complete
+2025-07-06 14:33:30,046 - qsaiids.system - INFO - All components initialized successfully
+2025-07-06 14:33:30,047 - qsaiids.system - INFO - Starting QS-AI-IDS system with real-time monitoring...
+2025-07-06 14:33:30,048 - qsaiids.system - INFO - Started quantum_detector
+2025-07-06 14:33:30,048 - qsaiids.system - INFO - Started network_monitor
+2025-07-06 14:33:30,049 - qsaiids.system - INFO - QS-AI-IDS system started successfully with real-time monitoring
+2025-07-06 14:33:32,748 - qsaiids.system - INFO - Shutting down QS-AI-IDS system...
+2025-07-06 14:33:34,754 - qsaiids.system - INFO - Stopped quantum_detector
+2025-07-06 14:33:34,766 - qsaiids.system - INFO - Stopped network_monitor
+2025-07-06 14:33:34,767 - qsaiids.system - INFO - QS-AI-IDS system shutdown complete

@@ -1,0 +1,37 @@
+# QS-AI-IDS Configuration File
+
+quantum:
+  enabled: true
+  num_qubits: 8
+  circuit_depth: 6
+  shots: 1024
+  backend: "qasm_simulator"
+  noise_model: false
+
+ai:
+  model_path: "models/quantum_detector.pth"
+  confidence_threshold: 0.7
+  batch_size: 32
+  learning_rate: 0.001
+  epochs: 100
+
+network:
+  interfaces:
+    - "eth0"
+    - "wlan0"
+  packet_buffer_size: 10000
+  capture_filter: "tcp port 80 or tcp port 443"
+  promiscuous_mode: true
+
+security:
+  encryption_enabled: true
+  key_rotation_interval: 86400  # 24 hours in seconds
+  audit_logging: true
+  threat_response: true
+
+web:
+  host: "localhost"
+  port: 8501
+  debug: false
+  auto_refresh: 5
+  max_concurrent_users: 10
