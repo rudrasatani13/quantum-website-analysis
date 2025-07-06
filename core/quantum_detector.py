@@ -13,6 +13,13 @@ from typing import Dict, List, Any, Optional
 import logging
 from datetime import datetime
 import random
+from qiskit import IBMQ, transpile
+from dotenv import load_dotenv
+import os
+
+dotenv_path = "/Users/apple/Desktop/qs-ai-ids-dashboard/.env"
+load_dotenv(dotenv_path=dotenv_path)
+ibmq_token = os.getenv("IBMQ_API_TOKEN")
 
 
 class QuantumFeatureMap:
@@ -83,19 +90,30 @@ class QuantumVariationalCircuit:
 
 
 class QuantumThreatDetector:
-    """Advanced quantum threat detector"""
-
     def __init__(self, num_qubits: int = 8, use_quantum: bool = True):
+        load_dotenv()  # Yeh file ke start me bhi daal sakte ho, par yahan bhi chalega
+        ibmq_token = os.getenv("IBMQ_API_TOKEN")
         self.num_qubits = num_qubits
         self.use_quantum = use_quantum
         self.logger = logging.getLogger(__name__)
 
-        # Initialize quantum components
         if self.use_quantum:
             self.feature_map = QuantumFeatureMap(num_qubits, num_features=16)
             self.variational_circuit = QuantumVariationalCircuit(num_qubits, num_layers=4)
             self.simulator = AerSimulator()
+
+            try:
+                self.provider = IBMQ.load_account()
+            except Exception:
+                if ibmq_token:
+                    IBMQ.save_account(ibmq_token, overwrite=True)
+                    self.provider = IBMQ.load_account()
+                else:
+                    raise Exception("IBMQ token not found in environment variables!")
+            self.real_backend = self.provider.get_backend("ibmq_manila") # backend name config se bhi le sakte ho
+
             self.sampler = Sampler()
+        # ...baaki code same
 
         # Classical fallback neural network
         self.classical_model = self._create_classical_model()
@@ -229,9 +247,10 @@ class QuantumThreatDetector:
             for i, param in enumerate(self.variational_circuit.parameters):
                 param_values[param] = np.random.uniform(0, 2 * np.pi)
 
-            # Execute circuit
+            # Execute circuit on real IBMQ backend
             bound_circuit = full_circuit.bind_parameters(param_values)
-            job = self.simulator.run(bound_circuit, shots=1024)
+            transpiled = transpile(bound_circuit, backend=self.real_backend)
+            job = self.real_backend.run(transpiled, shots=1024)
             result = job.result()
             counts = result.get_counts()
 

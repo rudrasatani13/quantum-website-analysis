@@ -18,6 +18,10 @@ import ssl
 import socket
 from urllib.parse import urlparse
 import re
+from dotenv import load_dotenv
+import os
+
+load_dotenv(dotenv_path="/Users/apple/Desktop/qs-ai-ids-dashboard/.env")
 
 # Add project root to Python path
 PROJECT_ROOT = Path(__file__).parent.absolute()
@@ -685,7 +689,7 @@ st.markdown("""
     }
 
     .quantum-metrics {
-        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        background: linear-gradient(135deg, #f0f9ff 0%, #064460 100%);
         border: 2px solid #0ea5e9;
         border-radius: 10px;
         padding: 1rem;

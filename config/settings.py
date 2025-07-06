@@ -49,6 +49,17 @@ class SecuritySettings:
     audit_logging: bool = True
     threat_response: bool = False
 
+@dataclass
+class QuantumSettings:
+    """Quantum computing settings"""
+    enabled: bool = True
+    num_qubits: int = 8
+    circuit_depth: int = 4
+    shots: int = 1024
+    backend: str = "ibmq_manila"   # CHANGE: "qasm_simulator" → "ibmq_manila"
+    noise_model: bool = False
+    ibmq_token: str = "Wc-DVGx2L2_etxta47ATOiERc6_zooawIM1xhye-C3Wn"
+
 
 class Settings:
     """Main settings class"""
