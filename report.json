@@ -1,0 +1,71 @@
+{
+  "url": "https://ppsu.ac.in",
+  "timestamp": "2025-07-07T17:41:14.652917",
+  "threats_detected": [],
+  "vulnerabilities": [],
+  "security_score": 100,
+  "recommendations": [
+    "\ud83d\udc4d Website appears legitimate with room for security improvements",
+    "\ud83c\udf89 Excellent security posture! Continue monitoring for new threats"
+  ],
+  "technical_details": {
+    "status_code": 200,
+    "response_headers": {
+      "Date": "Mon, 07 Jul 2025 12:11:15 GMT",
+      "Server": "Apache",
+      "X-Powered-By": "PHP/7.4.33",
+      "Upgrade": "h2,h2c",
+      "Connection": "Upgrade, Keep-Alive",
+      "Vary": "Accept-Encoding",
+      "Content-Encoding": "gzip",
+      "Access-Control-Allow-Origin": "*",
+      "X-Content-Type-Options": "nosniff",
+      "X-XSS-Protection": "1; mode=block",
+      "X-Frame-Options": "SAMEORIGIN",
+      "Content-Length": "26118",
+      "Keep-Alive": "timeout=5, max=100",
+      "Content-Type": "text/html; charset=UTF-8"
+    },
+    "ssl_info": {
+      "protocol": "TLSv1.3",
+      "cipher_suite": "TLS_AES_256_GCM_SHA384",
+      "key_length": 256,
+      "certificate_valid": true,
+      "issuer": {
+        "countryName": "GB",
+        "stateOrProvinceName": "Greater Manchester",
+        "localityName": "Salford",
+        "organizationName": "Sectigo Limited",
+        "commonName": "Sectigo RSA Domain Validation Secure Server CA"
+      },
+      "subject": {
+        "commonName": "*.ppsu.ac.in"
+      },
+      "expires": "Nov 29 23:59:59 2025 GMT",
+      "weak_cipher": false
+    }
+  },
+  "quantum_analysis": {
+    "quantum_enabled": true,
+    "qubits_used": 8,
+    "circuits_executed": 1,
+    "quantum_threats": [],
+    "quantum_confidence": 0.029249999999999998,
+    "superposition_states": 256,
+    "entanglement_measure": 0.0,
+    "real_analysis": true,
+    "legitimacy_score": 0.675,
+    "security_indicators": {
+      "https_enabled": true,
+      "ssl_valid": true,
+      "security_headers_count": 3,
+      "content_length": 167485,
+      "has_csp": false,
+      "has_hsts": false,
+      "professional_structure": true
+    },
+    "quantum_enhancement_active": false
+  },
+  "risk_level": "LOW",
+  "status": "\ud83d\udfe2 SECURE"
+}

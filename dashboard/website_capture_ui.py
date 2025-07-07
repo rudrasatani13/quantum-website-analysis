@@ -9,6 +9,7 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import json
 import time
+import html
 from typing import Dict, Any, List
 
 class WebsiteCaptureUI:
@@ -391,6 +392,10 @@ class WebsiteCaptureUI:
                 color = "#10b981"  # Green
                 icon = "🟢"
             
+            # Properly escape HTML in the description to prevent rendering issues
+            safe_description = html.escape(str(description))
+            safe_threat_type = html.escape(str(threat_type))
+
             st.markdown(f"""
             <div style="
                 border: 2px solid {color};
@@ -399,8 +404,8 @@ class WebsiteCaptureUI:
                 background: #fefefe;
                 border-radius: 8px;
             ">
-                <h4>{icon} {threat_type.replace('_', ' ').title()} - {severity.upper()}</h4>
-                <p>{description}</p>
+                <h4>{icon} {safe_threat_type.replace('_', ' ').title()} - {severity.upper()}</h4>
+                <p>{safe_description}</p>
                 <small>🕒 {timestamp}</small>
             </div>
             """, unsafe_allow_html=True)
