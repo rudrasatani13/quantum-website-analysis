@@ -112,7 +112,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🧑‍💻 About the Developer
 
-Developed by Rudra Satani, a B.Tech CSE student specializing in Artificial Intelligence and Machine Learning at P P Savani University.
+Developed by Rudra Satani.
 
 ---
 
