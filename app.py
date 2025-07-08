@@ -1210,41 +1210,23 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Enhanced CSS with quantum styling and dark mode support
+# Professional minimal CSS styling
 st.markdown("""
 <style>
     .main-header {
-        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #8b5cf6 100%);
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         padding: 2rem;
-        border-radius: 20px;
-        color: white;
+        border-radius: 12px;
+        color: #1a202c;
         text-align: center;
         margin-bottom: 2rem;
-        box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-    
-    .main-header::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        animation: headerScan 3s infinite;
-    }
-    
-    @keyframes headerScan {
-        0% { left: -100%; }
-        100% { left: 100%; }
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
     }
     
     .main-header:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 50px rgba(139, 92, 246, 0.5);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
     
     .dark-mode-toggle {
@@ -1252,21 +1234,21 @@ st.markdown("""
         top: 20px;
         right: 20px;
         z-index: 1000;
-        background: linear-gradient(45deg, #6366f1, #8b5cf6);
-        border: none;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
+        background: #4a5568;
+        border: 1px solid #cbd5e0;
+        border-radius: 8px;
+        width: 44px;
+        height: 44px;
         color: white;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         cursor: pointer;
-        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
     }
     
     .dark-mode-toggle:hover {
-        transform: scale(1.1) rotate(360deg);
-        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+        background: #2d3748;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
     
     .main > div:first-child {
@@ -1274,364 +1256,291 @@ st.markdown("""
     }
 
     .quantum-header {
-        background: linear-gradient(45deg, #8b5cf6, #06b6d4, #10b981);
-        background-size: 400% 400%;
-        animation: quantumGradient 4s ease infinite;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
         padding: 1.5rem;
-        border-radius: 15px;
-        color: white;
+        color: #1a202c;
         text-align: center;
         margin: 1rem 0;
-        box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .quantum-header::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.3"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="30" r="1.5" fill="white" opacity="0.5"><animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/></circle><circle cx="30" cy="70" r="1" fill="white" opacity="0.4"><animate attributeName="opacity" values="0.4;1;0.4" dur="3s" repeatCount="indefinite"/></circle></svg>');
-        pointer-events: none;
-    }
-
-    @keyframes quantumGradient {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
     .threat-card-quantum {
-        background: linear-gradient(135deg, #fdf4ff 0%, #f3e8ff 100%);
-        border: 3px solid #8b5cf6;
-        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
         padding: 1.5rem;
         margin: 1rem 0;
-        color: #581c87;
-        font-weight: bold;
-        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s ease;
-        cursor: pointer;
+        color: #2d3748;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
     }
     
     .threat-card-quantum:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
-        border-color: #7c3aed;
-    }
-
-    .threat-card-quantum::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
-        animation: quantumScan 2s infinite;
-    }
-
-    @keyframes quantumScan {
-        0% { left: -100%; }
-        100% { left: 100%; }
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-color: #cbd5e0;
     }
 
     .threat-card-high {
-        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-        border: 3px solid #dc2626;
-        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid #feb2b2;
+        border-left: 4px solid #f56565;
+        border-radius: 8px;
         padding: 1.5rem;
         margin: 1rem 0;
-        color: #7f1d1d;
-        font-weight: bold;
-        box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
-        transition: all 0.3s ease;
+        color: #2d3748;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
     }
     
     .threat-card-high:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(220, 38, 38, 0.4);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .threat-card-medium {
-        background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-        border: 3px solid #f59e0b;
-        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid #fbd38d;
+        border-left: 4px solid #ed8936;
+        border-radius: 8px;
         padding: 1.5rem;
         margin: 1rem 0;
-        color: #92400e;
-        font-weight: bold;
-        box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
-        transition: all 0.3s ease;
+        color: #2d3748;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
     }
     
     .threat-card-medium:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(245, 158, 11, 0.4);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .threat-card-low {
-        background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
-        border: 3px solid #059669;
-        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid #9ae6b4;
+        border-left: 4px solid #48bb78;
+        border-radius: 8px;
         padding: 1.5rem;
         margin: 1rem 0;
-        color: #064e3b;
-        font-weight: bold;
-        box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
-        transition: all 0.3s ease;
+        color: #2d3748;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
     }
     
     .threat-card-low:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(5, 150, 105, 0.4);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
-    }
-
     .secure-card {
-        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-        border: 3px solid #10b981;
-        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid #9ae6b4;
+        border-left: 4px solid #48bb78;
+        border-radius: 8px;
         padding: 1.5rem;
         margin: 1rem 0;
-        color: #064e3b;
-        font-weight: bold;
-        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
-        transition: all 0.3s ease;
+        color: #2d3748;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
         position: relative;
-        overflow: hidden;
     }
     
     .secure-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(16, 185, 129, 0.4);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     .secure-card::before {
         content: '✓';
         position: absolute;
-        top: 10px;
+        top: 15px;
         right: 15px;
-        font-size: 1.5rem;
-        color: #10b981;
-        opacity: 0.7;
+        font-size: 1.2rem;
+        color: #48bb78;
+        opacity: 0.8;
     }
 
     .legitimate-card {
-        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-        border: 3px solid #3b82f6;
-        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid #90cdf4;
+        border-left: 4px solid #4299e1;
+        border-radius: 8px;
         padding: 1.5rem;
         margin: 1rem 0;
-        color: #1e40af;
-        font-weight: bold;
-        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
-        transition: all 0.3s ease;
+        color: #2d3748;
+        font-weight: 500;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
         position: relative;
-        overflow: hidden;
     }
     
     .legitimate-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     .legitimate-card::before {
         content: '🛡️';
         position: absolute;
-        top: 10px;
+        top: 15px;
         right: 15px;
-        font-size: 1.2rem;
-        opacity: 0.7;
+        font-size: 1rem;
+        opacity: 0.8;
     }
 
     .quantum-metrics {
-        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        border: 2px solid #0ea5e9;
-        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
         padding: 1.5rem;
         margin: 0.5rem 0;
         text-align: center;
-        color: white;
-        box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
+        color: #2d3748;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
     }
     
     .quantum-metrics:hover {
-        transform: scale(1.02);
-        box-shadow: 0 12px 35px rgba(14, 165, 233, 0.4);
-    }
-    
-    .quantum-metrics::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><circle cx="30" cy="30" r="1" fill="%2306b6d4" opacity="0.6" filter="url(%23glow)"><animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite"/></circle></svg>');
-        pointer-events: none;
-        opacity: 0.3;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .quantum-badge {
-        background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+        background: #4a5568;
         color: white;
-        padding: 0.6rem 1.2rem;
-        border-radius: 25px;
-        font-size: 0.85rem;
-        font-weight: bold;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 500;
         display: inline-block;
-        margin: 0.3rem;
-        animation: pulse 2s infinite;
-        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        transition: all 0.3s ease;
-        cursor: pointer;
+        margin: 0.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
     }
     
     .quantum-badge:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.5);
+        background: #2d3748;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
 
     .universal-badge {
-        background: linear-gradient(45deg, #10b981, #059669);
+        background: #4a5568;
         color: white;
-        padding: 0.4rem 1rem;
-        border-radius: 20px;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
         font-size: 0.75rem;
-        font-weight: bold;
+        font-weight: 500;
         display: inline-block;
-        margin: 0.3rem;
-        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        transition: all 0.3s ease;
-        cursor: pointer;
+        margin: 0.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
     }
     
     .universal-badge:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        background: #2d3748;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
 
     .legitimacy-badge {
-        background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+        background: #4a5568;
         color: white;
-        padding: 0.4rem 1rem;
-        border-radius: 20px;
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
         font-size: 0.75rem;
-        font-weight: bold;
+        font-weight: 500;
         display: inline-block;
-        margin: 0.3rem;
-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        transition: all 0.3s ease;
-        cursor: pointer;
+        margin: 0.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
     }
     
     .legitimacy-badge:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        background: #2d3748;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
     
-    @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.8; }
-        100% { opacity: 1; }
-    }
-    
-    /* Enhanced Button Styles */
+    /* Professional Button Styles */
     .stButton > button {
-        background: linear-gradient(45deg, #8b5cf6, #3b82f6) !important;
+        background: #4a5568 !important;
         color: white !important;
-        border: none !important;
-        border-radius: 10px !important;
-        padding: 0.6rem 1.5rem !important;
-        font-weight: bold !important;
-        transition: all 0.3s ease !important;
-        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3) !important;
+        border: 1px solid #cbd5e0 !important;
+        border-radius: 6px !important;
+        padding: 0.6rem 1.2rem !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4) !important;
-        background: linear-gradient(45deg, #7c3aed, #2563eb) !important;
+        background: #2d3748 !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) !important;
     }
     
     .stButton > button:active {
-        transform: translateY(0px) !important;
-        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
     }
     
-    /* Enhanced Input Styles */
+    /* Professional Input Styles */
     .stTextInput > div > div > input {
-        border-radius: 10px !important;
-        border: 2px solid #e2e8f0 !important;
-        transition: all 0.3s ease !important;
-        padding: 0.7rem !important;
+        border-radius: 6px !important;
+        border: 1px solid #cbd5e0 !important;
+        transition: all 0.2s ease !important;
+        padding: 0.6rem !important;
     }
     
     .stTextInput > div > div > input:focus {
-        border-color: #8b5cf6 !important;
-        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+        border-color: #4a5568 !important;
+        box-shadow: 0 0 0 2px rgba(74, 85, 104, 0.1) !important;
     }
     
-    /* Enhanced Selectbox Styles */
+    /* Professional Selectbox Styles */
     .stSelectbox > div > div > div {
-        border-radius: 10px !important;
-        border: 2px solid #e2e8f0 !important;
-        transition: all 0.3s ease !important;
+        border-radius: 6px !important;
+        border: 1px solid #cbd5e0 !important;
+        transition: all 0.2s ease !important;
     }
     
     .stSelectbox > div > div > div:focus-within {
-        border-color: #8b5cf6 !important;
-        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+        border-color: #4a5568 !important;
+        box-shadow: 0 0 0 2px rgba(74, 85, 104, 0.1) !important;
     }
     
-    /* Enhanced Sidebar Styles */
+    /* Professional Sidebar Styles */
     .css-1d391kg {
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
-        border-right: 3px solid #8b5cf6 !important;
+        background: #f7fafc !important;
+        border-right: 1px solid #e2e8f0 !important;
     }
     
-    /* Enhanced Metrics */
+    /* Professional Metrics */
     .metric-card {
-        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-        border: 2px solid #e2e8f0;
-        border-radius: 15px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
         padding: 1rem;
         margin: 0.5rem 0;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
     
     .metric-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        border-color: #8b5cf6;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        border-color: #cbd5e0;
     }
     
-    /* Progress Bar Enhancement */
+    /* Professional Progress Bar */
     .stProgress > div > div > div {
-        background: linear-gradient(45deg, #8b5cf6, #3b82f6) !important;
-        border-radius: 10px !important;
+        background: #4a5568 !important;
+        border-radius: 4px !important;
     }
     
-    /* Loading Spinner Enhancement */
+    /* Professional Loading Spinner */
     .stSpinner > div {
-        border-color: #8b5cf6 !important;
+        border-color: #4a5568 !important;
     }
     
     /* Responsive Design */
     @media (max-width: 768px) {
         .main-header {
-            padding: 1rem !important;
+            padding: 1.5rem !important;
             font-size: 0.9rem !important;
         }
         
