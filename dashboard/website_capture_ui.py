@@ -158,11 +158,13 @@ class WebsiteCaptureUI:
                     
                     st.markdown(f"""
                     <div style="
-                        border: 2px solid #10b981;
-                        border-radius: 10px;
+                        border: 1px solid #e2e8f0;
+                        border-left: 4px solid #48bb78;
+                        border-radius: 8px;
                         padding: 1rem;
                         margin: 0.5rem 0;
-                        background: linear-gradient(45deg, #f0fdf4, #ecfdf5);
+                        background: #ffffff;
+                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
                     ">
                         <h4>🌐 {url[:30]}...</h4>
                         <p><strong>Status:</strong> 🔴 LIVE</p>

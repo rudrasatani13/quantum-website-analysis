@@ -1656,7 +1656,7 @@ def main():
         st.markdown("""
         <div style="text-align: center; margin-bottom: 1rem;">
             <h2 style="color: #8b5cf6; margin-bottom: 0.5rem;">🔧 Control Panel</h2>
-            <div style="background: linear-gradient(45deg, #10b981, #059669); color: white; padding: 0.5rem; border-radius: 10px; font-weight: bold;">
+            <div style="background: #ffffff; color: #2d3748; padding: 0.5rem; border-radius: 6px; font-weight: 500; border: 1px solid #48bb78; border-left: 4px solid #48bb78;">
                 🟢 UNIVERSAL QUANTUM ACTIVE
             </div>
         </div>
@@ -1744,16 +1744,16 @@ def main():
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("""
-            <div style="text-align: center; padding: 0.5rem; background: linear-gradient(45deg, #10b981, #059669); color: white; border-radius: 8px; margin-bottom: 0.5rem;">
-                <div style="font-weight: bold;">CPU</div>
+            <div style="text-align: center; padding: 0.5rem; background: #ffffff; color: #2d3748; border-radius: 6px; margin-bottom: 0.5rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                <div style="font-weight: 500;">CPU</div>
                 <div style="font-size: 1.2rem;">12%</div>
             </div>
             """, unsafe_allow_html=True)
             
         with col2:
             st.markdown("""
-            <div style="text-align: center; padding: 0.5rem; background: linear-gradient(45deg, #3b82f6, #1d4ed8); color: white; border-radius: 8px; margin-bottom: 0.5rem;">
-                <div style="font-weight: bold;">Memory</div>
+            <div style="text-align: center; padding: 0.5rem; background: #ffffff; color: #2d3748; border-radius: 6px; margin-bottom: 0.5rem; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
+                <div style="font-weight: 500;">Memory</div>
                 <div style="font-size: 1.2rem;">8%</div>
             </div>
             """, unsafe_allow_html=True)
@@ -1790,13 +1790,13 @@ def render_universal_quantum_website_scanner():
 
     # Enhanced info section
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); 
-                border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 10px; margin: 1rem 0;">
+    <div style="background: #ffffff; 
+                border-left: 4px solid #4a5568; padding: 1rem; border-radius: 8px; margin: 1rem 0; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
             <span style="font-size: 1.2rem;">🔬</span>
             <strong>Universal Analysis Technology</strong>
         </div>
-        <p style="margin: 0.5rem 0 0 0; color: #1e40af;">
+        <p style="margin: 0.5rem 0 0 0; color: #2d3748;">
             This scanner uses advanced quantum algorithms that can accurately assess ANY website 
             without requiring hardcoded threat signatures or manual configuration.
         </p>
@@ -1895,8 +1895,8 @@ def render_universal_quantum_website_scanner():
             
             for progress, message in progress_steps:
                 status_text.markdown(f"""
-                <div style="background: linear-gradient(45deg, #8b5cf6, #06b6d4); 
-                           color: white; padding: 0.5rem; border-radius: 8px; text-align: center;">
+                <div style="background: #ffffff; 
+                           color: #2d3748; padding: 0.5rem; border-radius: 6px; text-align: center; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);">
                     {message}
                 </div>
                 """, unsafe_allow_html=True)
