@@ -46,83 +46,258 @@ class UniversalQuantumWebsiteAnalyzer:
         self.quantum_threat_patterns = {
             'sql_injection': {
                 'malicious_patterns': [
-                    r'union\s+select\s+.*\s+from\s+\w+\s*(--|\#|\/\*)',
-                    r'drop\s+table\s+\w+\s*(--|\#|\/\*)',
-                    r'or\s+1\s*=\s*1\s*(--|\#|\/\*)',
-                    r'and\s+1\s*=\s*1\s*(--|\#|\/\*)',
-                    r'insert\s+into\s+\w+\s+values\s*$$[^)]*$$\s*(--|\#)',
-                    r'delete\s+from\s+\w+\s+where\s+.*\s*(--|\#)',
-                    r'information_schema\.tables\s*(--|\#)',
-                    r'mysql_version\s*$$\s*$$\s*(--|\#)',
-                    r'pg_sleep\s*$$\s*\d+\s*$$\s*(--|\#)',
-                    r'waitfor\s+delay\s+[\'"][0-9:]+[\'"]'
+                    # Classic tautology-based injections
+                    r"(?:')?\s*(or|and)\s+1\s*=\s*1\s*(--|\#|/\*|$)",
+                    r"(?:')?\s*(or|and)\s+['\"]?\w+['\"]?\s*=\s*['\"]?\w+['\"]?\s*(--|\#|/\*|$)",
+
+                    # UNION-based injection
+                    r"union\s+select\s+.*?(from|where)?\s+\w+.*?(--|\#|/\*)?",
+
+                    # DROP or DELETE payloads
+                    r"(drop|delete)\s+(table|database)\s+\w+.*?(--|\#|/\*)?",
+                    r"delete\s+from\s+\w+\s+where\s+.*?(--|\#|/\*)?",
+
+                    # INSERT payloads
+                    r"insert\s+into\s+\w+\s*\([^)]*\)\s*values\s*\([^)]*\)\s*(--|\#)?",
+
+                    # Information gathering
+                    r"(information_schema|mysql\.db|pg_catalog)\.\w+",
+                    r"(version\(\)|database\(\)|user\(\)|current_user\(\))",
+                    r"mysql_version\s*.*?(--|\#)?",
+
+                    # Time-based blind SQLi
+                    r"(pg_sleep|benchmark|sleep|waitfor\s+delay)\s*\(?['\"]?\d+['\"]?\)?",
+
+                    # Hex and encoded injections
+                    r"0x[0-9a-fA-F]+",
+                    r"%27|%22|%3D|%3B|%20or%20|%20and%20",
+
+                    # Obfuscation or stacked queries
+                    r"[^a-zA-Z0-9](;|\|\|)\s*[^a-zA-Z0-9]",
+                    r"exec(\s|\+)+(s|x)p\w+",
                 ],
+
+                'context_rules': {
+                    'username': {
+                        'expected_type': 'alphanumeric',
+                        'max_length': 30,
+                        'pattern_constraint': r"^[a-zA-Z0-9_]+$"
+                    },
+                    'email': {
+                        'expected_type': 'email',
+                        'pattern_constraint': r"^[\w\.-]+@[\w\.-]+\.\w+$"
+                    },
+                    'age': {
+                        'expected_type': 'numeric',
+                        'range': [0, 130]
+                    }
+                },
+
                 'legitimate_indicators': [
                     'documentation', 'tutorial', 'example', 'demo', 'learn', 'guide',
                     'mysql.com', 'postgresql.org', 'w3schools', 'stackoverflow',
-                    'code example', 'syntax', 'reference'
+                    'code example', 'syntax', 'reference', 'sqlfiddle', 'how to'
                 ],
-                'severity_weight': 0.9,
-                'confidence_multiplier': 1.2
+
+                'quantum_metadata': {
+                    'log_signature_scheme': 'CRYSTALS-Dilithium2',
+                    'recommended_key_strength': '128-bit quantum-safe',
+                    'secure_channel_required': True
+                },
+
+                'severity_weight': 0.95,
+                'confidence_multiplier': 1.4,
+                'adaptive_learning': True,  # Optional: Enable reinforcement-based learning updates
+                'auto_blacklist_threshold': 0.85
             },
+
             'xss_attack': {
                 'malicious_patterns': [
-                    r'<script[^>]*>\s*alert\s*$$[^)]*$$',
-                    r'javascript:\s*alert\s*$$[^)]*$$',
-                    r'on\w+\s*=\s*[\'"].*alert\s*$$[^)]*$$',
-                    r'<iframe[^>]*src\s*=\s*[\'"]javascript:',
-                    r'document\.cookie\s*=\s*[^;]+',
-                    r'eval\s*$$\s*[\'"][^\'\"]*[\'\"]\s*$$',
-                    r'<object[^>]*data\s*=\s*[\'"]javascript:',
-                    r'vbscript:\s*alert\s*\(',
-                    r'expression\s*\(\s*alert\s*\(',
-                    r'<embed[^>]*src\s*=\s*[\'"]javascript:'
+                    # Basic <script>alert() injections
+                    r"<script[^>]*?>.*?(alert|prompt|confirm)\s*\(.*?\).*?<\/script\s*>",
+
+                    # JS protocol-based injections
+                    r"(javascript|vbscript):\s*(alert|prompt|confirm)\s*\(.*?\)",
+
+                    # Inline event handlers with JS payload
+                    r"on\w+\s*=\s*['\"]?\s*(alert|prompt|confirm)\s*\(.*?\)\s*['\"]?",
+
+                    # iframe, object, embed with javascript:
+                    r"<(iframe|object|embed)[^>]+?src\s*=\s*['\"]?\s*javascript:.*?['\"]?",
+
+                    # Cookie stealing or JS execution methods
+                    r"(document\.cookie|document\.location|window\.location)\s*=\s*['\"].*?['\"]",
+                    r"eval\s*\(\s*['\"].*?['\"]\s*\)",
+                    r"setTimeout\s*\(\s*['\"].*?['\"]\s*,\s*\d+\s*\)",
+                    r"setInterval\s*\(\s*['\"].*?['\"]\s*,\s*\d+\s*\)",
+                    r"Function\s*\(\s*['\"].*?['\"]\s*\)",
+
+                    # CSS/HTML-based attack vectors
+                    r"style\s*=\s*['\"]?expression\s*\(",
+                    r"<svg[^>]*?on\w+\s*=\s*['\"]?.*?['\"]?",
+                    r"<img[^>]*?\s+src\s*=\s*['\"]?javascript:.*?['\"]?",
+
+                    # Base64 or obfuscated payloads
+                    r"data:\s*text\/html\s*;\s*base64\s*,",
+                    r"(alert|prompt|confirm)\s*\(\s*String\.fromCharCode\(",
+                    r"&#[xX]?[0-9a-fA-F]+;"  # Encoded XSS
                 ],
+
+                'context_rules': {
+                    'comment': {
+                        'expected_type': 'text',
+                        'max_length': 500,
+                        'html_allowed': False
+                    },
+                    'username': {
+                        'expected_type': 'alphanumeric',
+                        'html_allowed': False
+                    },
+                    'bio': {
+                        'expected_type': 'text',
+                        'html_allowed': True,
+                        'sanitization_required': True
+                    }
+                },
+
                 'legitimate_indicators': [
                     'google-analytics', 'gtag', 'facebook', 'twitter', 'linkedin',
                     'cdn.', 'googleapis', 'jquery', 'bootstrap', 'react', 'angular',
-                    'legitimate script', 'tracking', 'analytics', 'advertisement'
+                    'legitimate script', 'tracking', 'analytics', 'advertisement',
+                    'type="application/ld+json"', 'meta name=', 'noscript'
                 ],
-                'severity_weight': 0.8,
-                'confidence_multiplier': 1.1
+
+                'quantum_metadata': {
+                    'log_signature_scheme': 'CRYSTALS-Falcon512',
+                    'recommended_key_strength': '128-bit quantum-safe',
+                    'secure_channel_required': True
+                },
+
+                'severity_weight': 0.85,
+                'confidence_multiplier': 1.3,
+                'adaptive_learning': True,
+                'auto_blacklist_threshold': 0.80
             },
+
             'command_injection': {
                 'malicious_patterns': [
-                    r';\s*(cat|ls|rm|wget|curl|nc)\s+[\/\w\.-]+',
-                    r'&&\s*(cat|ls|rm|wget|curl)\s+[\/\w\.-]+',
-                    r'\|\s*nc\s+\d+\.\d+\.\d+\.\d+\s+\d+',
-                    r'`(cat|ls|rm|wget|curl)\s+[\/\w\.-]+`',
-                    r'\$$$(cat|ls|rm|wget|curl)\s+[\/\w\.-]+$$',
-                    r'exec\s*$$\s*[\'"][^\'\"]*[\'\"]\s*$$',
-                    r'system\s*$$\s*[\'"][^\'\"]*[\'\"]\s*$$',
-                    r'shell_exec\s*$$\s*[\'"][^\'\"]*[\'\"]\s*$$',
-                    r'passthru\s*$$\s*[\'"][^\'\"]*[\'\"]\s*$$'
+                    # Basic command chaining
+                    r"(;|\|\||&&)\s*(cat|ls|rm|touch|chmod|chown|wget|curl|nc|ping|whoami|uname)\s+[\w\./-]+",
+
+                    # Reverse shell IP+port or netcat
+                    r"\|\s*(nc|telnet|bash|python|perl)\s+(\d{1,3}\.){3}\d{1,3}\s+\d+",
+
+                    # Command substitution
+                    r"`\s*(cat|ls|rm|wget|curl|ping|touch)\s+.*?`",
+                    r"\$\(\s*(cat|ls|rm|wget|curl|ping|touch)\s+.*?\)",
+
+                    # PHP/Perl/Node-style command execution
+                    r"(exec|system|passthru|shell_exec|popen|proc_open|os\.system)\s*\(\s*[\"']?.*?[\"']?\s*\)",
+                    r"require\s*\(\s*[\"']child_process[\"']\s*\)\.exec\s*\(",
+
+                    # Base64 or encoded command vectors
+                    r"(echo|printf)\s+[\"']?[a-zA-Z0-9+/=]{10,}[\"']?\s*\|\s*(bash|sh|zsh)",
+
+                    # Dangerous redirections or output capture
+                    r"(>|>>|<)\s*/?(dev|etc|proc|var)/[\w\-]+",
+
+                    # Obfuscated payloads via multiple methods
+                    r"(eval|exec)\s*\(\s*base64_decode\s*\(\s*[\"']?[a-zA-Z0-9+/=]{10,}[\"']?\s*\)\s*\)",
+                    r"(bash|sh|python|perl)\s+-e\s+[\"'].*?[\"']"
                 ],
+
+                'context_rules': {
+                    'shell_input': {
+                        'expected_type': 'safe_shell',  # You can later define this
+                        'max_length': 200,
+                        'should_not_contain': [';', '|', '&', '`', '$(', 'exec', 'system']
+                    },
+                    'upload_path': {
+                        'expected_type': 'path',
+                        'must_start_with': ['/home/', '/var/www/', '/tmp/'],
+                        'must_not_contain': ['..', '/etc/', '/proc/', '/dev/']
+                    },
+                    'username': {
+                        'expected_type': 'alphanumeric',
+                        'max_length': 30
+                    }
+                },
+
                 'legitimate_indicators': [
                     'documentation', 'tutorial', 'help', 'guide', 'example',
-                    'linux.org', 'unix', 'bash', 'shell scripting', 'command line'
+                    'linux.org', 'unix', 'bash', 'zsh', 'fish shell', 'shell scripting',
+                    'command line', 'man page', 'terminal demo', 'stack overflow'
                 ],
-                'severity_weight': 0.95,
-                'confidence_multiplier': 1.3
+
+                'quantum_metadata': {
+                    'log_signature_scheme': 'SPHINCS+',
+                    'recommended_key_strength': '128-bit quantum-safe',
+                    'secure_channel_required': True
+                },
+
+                'severity_weight': 0.97,
+                'confidence_multiplier': 1.4,
+                'adaptive_learning': True,
+                'auto_blacklist_threshold': 0.87
             },
+
             'path_traversal': {
                 'malicious_patterns': [
-                    r'\.\.\/.*\/etc\/passwd',
-                    r'\.\.\\.*\\windows\\system32',
-                    r'%2e%2e%2f.*%2fetc%2fpasswd',
-                    r'%2e%2e%5c.*%5cwindows',
-                    r'\.\.\/\.\.\/\.\.\/etc\/passwd',
-                    r'\.\.\\\.\.\\\.\.\\windows\\system32',
-                    r'\/etc\/passwd\x00',
-                    r'\/etc\/shadow\x00',
-                    r'\.\.\/\.\.\/\.\.\/\.\.\/etc'
+                    # Basic Unix-style traversal
+                    r"\.\./(\.\./)*etc/passwd",
+                    r"\.\./(\.\./)*etc/shadow",
+                    r"\.\./(\.\./)*var/log",
+
+                    # Windows-style traversal
+                    r"\.\.\\(\.\.\\)*windows\\system32",
+                    r"\.\.\\(\.\.\\)*windows\\win.ini",
+
+                    # URL-encoded traversal
+                    r"%2e%2e(%2f|%5c)+.*(%2fetc%2fpasswd|%5cwindows%5csystem32)",
+                    r"%2e%2e%2f%2e%2e%2f.*(%2fetc%2fshadow|%2fboot|%2fhome)",
+
+                    # Null-byte poisoning
+                    r"(\/etc\/passwd|\/etc\/shadow)\x00",
+                    r"(\\windows\\system32)\\?.*\x00",
+
+                    # Deep nested traversal
+                    r"(\.\.\/){4,}etc\/passwd",
+                    r"(\.\.\\){4,}windows\\system32",
+
+                    # Bypass via Unicode/obfuscation
+                    r"(\%c0\%ae|\%c1\%1c|\%c0\%af)+",  # UTF-8 double encoding bypass
+                    r"(\u002e\u002e)+(\/|\\)",  # Unicode escape sequences
                 ],
+
+                'context_rules': {
+                    'filepath': {
+                        'expected_type': 'path',
+                        'must_not_contain': ['..', '/etc/', '/proc/', '/windows/', '\x00'],
+                        'must_start_with': ['/user_data/', '/uploads/', '/safe/']
+                    },
+                    'download_request': {
+                        'expected_type': 'filename',
+                        'allowed_extensions': ['.pdf', '.jpg', '.png', '.docx'],
+                        'max_depth': 2  # prevent things like `../../../../filename`
+                    }
+                },
+
                 'legitimate_indicators': [
                     'documentation', 'example', 'tutorial', 'path', 'directory',
-                    'file system', 'navigation', 'breadcrumb'
+                    'file system', 'navigation', 'breadcrumb', 'absolute path',
+                    'relative path', 'project structure', 'explorer view'
                 ],
-                'severity_weight': 0.85,
-                'confidence_multiplier': 1.15
+
+                'quantum_metadata': {
+                    'log_signature_scheme': 'CRYSTALS-Dilithium3',
+                    'recommended_key_strength': '192-bit quantum-safe',
+                    'secure_channel_required': True
+                },
+
+                'severity_weight': 0.88,
+                'confidence_multiplier': 1.25,
+                'adaptive_learning': True,
+                'auto_blacklist_threshold': 0.82
             }
         }
 

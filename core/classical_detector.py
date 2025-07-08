@@ -1,77 +1,68 @@
 """
-Classical threat detection algorithms
+Classical threat detection using pattern matching and false-positive filtering
 """
 
 import re
 import logging
 from typing import Dict, List, Any
 from datetime import datetime
+import os
+import json
+
+# Import the false positive filter utility
+from utils.false_positive_filter import is_false_positive
 
 
 class ClassicalThreatDetector:
-    """Classical machine learning based threat detection"""
+    """Classical rule-based threat detector"""
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
 
-        # Threat signatures
-        self.signatures = {
-            'sql_injection': [
-                r'union\s+select',
-                r'drop\s+table',
-                r'insert\s+into',
-                r'delete\s+from',
-                r'update\s+set',
-                r'or\s+1\s*=\s*1',
-                r'and\s+1\s*=\s*1'
-            ],
-            'xss_attack': [
-                r'<script[^>]*>',
-                r'javascript:',
-                r'on\w+\s*=',
-                r'alert\s*\(',
-                r'document\.cookie',
-                r'eval\s*\('
-            ],
-            'command_injection': [
-                r';\s*cat\s+',
-                r';\s*ls\s+',
-                r';\s*rm\s+',
-                r';\s*wget\s+',
-                r';\s*curl\s+',
-                r'\|\s*nc\s+'
-            ],
-            'path_traversal': [
-                r'\.\./',
-                r'\.\.\\',
-                r'%2e%2e%2f',
-                r'%2e%2e%5c'
-            ]
-        }
-
-        self.logger.info("Classical detector initialized")
+        # Load attack patterns from external JSON
+        pattern_path = os.path.join("config", "attack_patterns.json")
+        try:
+            with open(pattern_path, "r") as f:
+                self.patterns_config = json.load(f)
+            self.logger.info("Attack patterns loaded successfully.")
+        except Exception as e:
+            self.logger.error(f"Failed to load attack patterns: {e}")
+            self.patterns_config = {}
 
     def analyze_payload(self, payload: str) -> Dict[str, Any]:
-        """Analyze payload using classical pattern matching"""
-
+        """Analyze a string payload and return threat detection result"""
         detections = []
         max_confidence = 0.0
         primary_threat = 'benign'
 
-        for threat_type, patterns in self.signatures.items():
-            matches = 0
+        for threat_type, threat_info in self.patterns_config.items():
+            patterns = threat_info.get("malicious_patterns", [])
+            indicators = threat_info.get("legitimate_indicators", [])
+            weight = threat_info.get("severity_weight", 1.0)
+            multiplier = threat_info.get("confidence_multiplier", 1.0)
 
+            matches = 0
             for pattern in patterns:
-                if re.search(pattern, payload, re.IGNORECASE):
-                    matches += 1
+                try:
+                    if re.search(pattern, payload, re.IGNORECASE):
+                        matches += 1
+                except re.error as regex_error:
+                    self.logger.warning(f"Invalid regex in {threat_type}: {pattern} ({regex_error})")
 
             if matches > 0:
-                confidence = min(matches / len(patterns), 1.0)
+                # Check for false positives using legitimate indicators
+                if is_false_positive(payload, indicators):
+                    self.logger.info(f"[Filtered] False positive detected for threat: {threat_type}")
+                    continue
+
+                confidence = min(matches / len(patterns), 1.0) * multiplier
 
                 detections.append({
                     'type': threat_type,
-                    'confidence': confidence,
-                    'matches': matches
+                    'confidence': round(confidence, 3),
+                    'matches': matches,
+                    'weight': weight
                 })
 
                 if confidence > max_confidence:
@@ -83,77 +74,64 @@ class ClassicalThreatDetector:
         return {
             'threat_detected': is_threat,
             'threat_type': primary_threat,
-            'confidence': max_confidence,
+            'confidence': round(max_confidence, 3),
             'all_detections': detections,
             'analysis_method': 'classical_signatures',
             'timestamp': datetime.now().isoformat()
         }
 
     def analyze_http_request(self, request_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze HTTP request for threats"""
-
+        """Analyze an HTTP request dictionary"""
         url = request_data.get('url', '')
         headers = request_data.get('headers', {})
         body = request_data.get('body', '')
+        method = request_data.get('method', 'GET')
 
-        # Combine all text for analysis
         combined_payload = f"{url} {body}"
-        for header_name, header_value in headers.items():
-            combined_payload += f" {header_name}:{header_value}"
+        for k, v in headers.items():
+            combined_payload += f" {k}:{v}"
 
-        result = self.analyze_payload(combined_payload)
+        base_result = self.analyze_payload(combined_payload)
 
-        # Add HTTP-specific analysis
-        result['http_analysis'] = {
+        base_result['http_analysis'] = {
             'suspicious_headers': self._check_suspicious_headers(headers),
             'url_analysis': self._analyze_url(url),
-            'method': request_data.get('method', 'GET')
+            'method': method
         }
 
-        return result
+        return base_result
 
     def _check_suspicious_headers(self, headers: Dict[str, str]) -> List[str]:
-        """Check for suspicious HTTP headers"""
-        suspicious = []
-
-        suspicious_patterns = {
+        """Detect suspicious headers often used in attacks"""
+        suspicious_headers = []
+        keyword_map = {
             'user-agent': ['sqlmap', 'nikto', 'nmap', 'burp'],
             'x-forwarded-for': ['127.0.0.1', 'localhost'],
             'referer': ['javascript:', 'data:']
         }
 
-        for header_name, header_value in headers.items():
-            header_lower = header_name.lower()
+        for header, value in headers.items():
+            lower_header = header.lower()
+            for keyword in keyword_map.get(lower_header, []):
+                if keyword in value.lower():
+                    suspicious_headers.append(f"{header}: {keyword}")
 
-            if header_lower in suspicious_patterns:
-                for pattern in suspicious_patterns[header_lower]:
-                    if pattern in header_value.lower():
-                        suspicious.append(f"{header_name}: {pattern}")
-
-        return suspicious
+        return suspicious_headers
 
     def _analyze_url(self, url: str) -> Dict[str, Any]:
-        """Analyze URL for suspicious patterns"""
-
+        """Basic URL analysis for suspicious components"""
         analysis = {
             'length': len(url),
             'suspicious_params': [],
-            'encoded_chars': 0,
+            'encoded_chars': url.count('%'),
             'suspicious_paths': []
         }
 
-        # Check for suspicious parameters
-        suspicious_params = ['cmd', 'exec', 'system', 'eval', 'file', 'dir']
-        for param in suspicious_params:
+        for param in ['cmd', 'exec', 'file', 'system', 'eval']:
             if param in url.lower():
                 analysis['suspicious_params'].append(param)
 
-        # Count encoded characters
-        analysis['encoded_chars'] = url.count('%')
-
-        # Check for suspicious paths
-        suspicious_paths = ['admin', 'config', 'backup', 'test', 'debug']
-        for path in suspicious_paths:
+        for path in ['admin', 'debug', 'config', 'backup']:
             if f"/{path}" in url.lower():
                 analysis['suspicious_paths'].append(path)
 

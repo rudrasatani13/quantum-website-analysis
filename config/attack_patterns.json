@@ -1,0 +1,76 @@
+{
+  "sql_injection": {
+    "malicious_patterns": [
+      "(?i)(union\\s*select\\s+[^\\s]+|select\\s+.*\\s+from)",
+      "(?i)\\b(drop|truncate|alter)\\s+(table|database)\\b",
+      "(?i)(or|and)\\s+[\\w']+\\s*=\\s*[\\w']+",
+      "(?i)\\bexec\\b.*\\bsp_executesql\\b",
+      "(?i)char\\s*\\(\\d+\\)",
+      "(?i)0x[0-9a-fA-F]+",
+      "(?i)(\\%27)|(\\')|(\\-\\-)|(\\%23)|(#)",
+      "(?i)benchmark\\s*\\(\\s*\\d+\\s*,\\s*md5"
+    ],
+    "legitimate_indicators": [
+      "sql tutorial", "database schema", "learn mysql", "w3schools"
+    ],
+    "severity_weight": 0.95,
+    "confidence_multiplier": 1.25
+  },
+
+  "xss_attack": {
+    "malicious_patterns": [
+      "(?i)<script[^>]*?>[\\s\\S]*?<\\/script>",
+      "(?i)onerror\\s*=\\s*[\"']?alert",
+      "(?i)onload\\s*=\\s*[\"']?alert",
+      "(?i)<img\\s+src\\s*=\\s*\"javascript:[^\"]+\"",
+      "(?i)javascript:\\s*alert\\s*\\(",
+      "(?i)eval\\s*\\(",
+      "(?i)document\\.cookie",
+      "(?i)window\\.location",
+      "(?i)<iframe\\s+src\\s*=\\s*\"javascript:"
+    ],
+    "legitimate_indicators": [
+      "cdn", "jquery", "react", "angular", "vue", "ad-tracking"
+    ],
+    "severity_weight": 0.9,
+    "confidence_multiplier": 1.2
+  },
+
+  "command_injection": {
+    "malicious_patterns": [
+      "(?i)(;|&&|\\|)\\s*(cat|ls|pwd|wget|curl|nc|ping)\\s+",
+      "(?i)\\$\\((cat|ls|rm|curl|wget)\\s+[^)]+\\)",
+      "(?i)`(cat|ls|curl|wget)\\s+[^`]+`",
+      "(?i)(python|perl|bash|sh)\\s+-c\\s+['\"]",
+      "(?i)base64\\s+-d",
+      "(?i)\\bexec\\b\\s*\\(",
+      "(?i)shell_exec\\s*\\(",
+      "(?i)system\\s*\\(",
+      "(?i)passthru\\s*\\("
+    ],
+    "legitimate_indicators": [
+      "linux doc", "bash examples", "terminal guide", "devops guide"
+    ],
+    "severity_weight": 0.97,
+    "confidence_multiplier": 1.35
+  },
+
+  "path_traversal": {
+    "malicious_patterns": [
+      "(?i)(\\.\\./)+etc/passwd",
+      "(?i)(\\.\\.\\\\)+windows\\\\system32",
+      "(?i)%2e%2e%2f.*%2fetc%2fpasswd",
+      "(?i)%2e%2e%5c.*%5cwindows%5csystem32",
+      "(?i)/etc/passwd\\x00",
+      "(?i)\\bfile:\\/\\/\\b.*\\b",
+      "(?i)\\binput\\s*\\+\\s*[\"']?\\s*\\.\\s*\\.",
+      "(?i)(..\\/){3,}.*",
+      "(?i)(..\\\\){3,}.*"
+    ],
+    "legitimate_indicators": [
+      "breadcrumb", "directory traversal", "file structure docs"
+    ],
+    "severity_weight": 0.88,
+    "confidence_multiplier": 1.18
+  }
+}
