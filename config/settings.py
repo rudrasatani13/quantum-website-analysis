@@ -58,7 +58,7 @@ class QuantumSettings:
     shots: int = 1024
     backend: str = "ibmq_manila"   # CHANGE: "qasm_simulator" → "ibmq_manila"
     noise_model: bool = False
-    ibmq_token: str = "Wc-DVGx2L2_etxta47ATOiERc6_zooawIM1xhye-C3Wn"
+    ibmq_token: str = ""
 
 
 class Settings:
