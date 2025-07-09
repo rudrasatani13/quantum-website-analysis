@@ -29,6 +29,7 @@ PROJECT_ROOT = Path(__file__).parent.absolute()
 sys.path.insert(0, str(PROJECT_ROOT))
 
 # Import our custom modules
+from utils.quantum_detector import QuantumDetector
 from utils.data_processor import DataProcessor
 from utils.ai_detector import AIDetector
 from utils.network_monitor import NetworkMonitor
@@ -41,18 +42,6 @@ from utils.async_scanner import AsyncScanner
 
 # Advanced Context-Aware Threat Detection
 class AdvancedContextAnalyzer:
-    """
-    Advanced context-aware website security analyzer that works for any website
-
-    This class implements sophisticated pattern matching with context awareness
-    to detect security threats in website content. It analyzes patterns within
-    their context to reduce false positives and provide accurate assessments.
-
-    Attributes:
-        context_enabled (bool): Whether context-aware analysis is enabled
-        analysis_depth (int): Depth of context analysis
-        threat_patterns (dict): Database of threat patterns with context rules
-    """
 
     def __init__(self):
         self.context_enabled = True
@@ -65,23 +54,6 @@ class AdvancedContextAnalyzer:
         self.threat_patterns = {}
 
     def analyze_content(self, content, url, classical_threats, security_headers, ssl_info):
-        """
-        Advanced context-aware content analysis for any website
-
-        This method performs deep context-aware analysis on website content
-        to detect potential security threats while minimizing false positives.
-
-        Args:
-            content (str): The HTML/text content of the website
-            url (str): The URL of the website
-            classical_threats (list): Previously detected threats
-            security_headers (dict): Security headers from HTTP response
-            ssl_info (dict): SSL/TLS configuration information
-
-        Returns:
-            dict: Analysis results containing threats, confidence scores,
-                  and security indicators
-        """
         # Use the pattern analyzer
         pattern_results = self.pattern_analyzer.analyze_patterns(content)
 
@@ -138,19 +110,6 @@ class AdvancedContextAnalyzer:
 
 # Advanced Security Analyzer
 class AdvancedSecurityAnalyzer:
-    """
-    Advanced website security analysis system that works for any website
-
-    This class coordinates multiple analysis techniques including pattern matching,
-    machine learning, and context-aware analysis to provide comprehensive
-    security assessments of websites.
-
-    Attributes:
-        context_analyzer (AdvancedContextAnalyzer): Context-aware pattern analyzer
-        security_headers_analyzer (SecurityHeadersAnalyzer): Security headers analyzer
-        ml_detector (MLDetector): Machine learning based threat detector
-        async_scanner (AsyncScanner): Asynchronous website scanner
-    """
 
     def __init__(self):
         # Replace quantum_analyzer with context_analyzer
@@ -177,20 +136,7 @@ class AdvancedSecurityAnalyzer:
         ]
 
     async def analyze_website_async(self, url):
-        """
-        Asynchronously analyze website security with advanced techniques
 
-        This method performs a comprehensive security analysis of a website
-        using multiple techniques including context-aware pattern matching,
-        machine learning detection, and security header analysis.
-
-        Args:
-            url (str): The URL of the website to analyze
-
-        Returns:
-            dict: Comprehensive analysis results including threats,
-                  vulnerabilities, security score, and recommendations
-        """
         # Initialize result structure
         analysis_result = {
             'url': url,
@@ -350,18 +296,7 @@ class AdvancedSecurityAnalyzer:
         return analysis_result
 
     def analyze_website(self, url):
-        """
-        Synchronous wrapper for website analysis
 
-        This method provides backward compatibility with the original API
-        by running the asynchronous analysis in a synchronous context.
-
-        Args:
-            url (str): The URL of the website to analyze
-
-        Returns:
-            dict: Comprehensive analysis results
-        """
         # Create an event loop for async operation
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
