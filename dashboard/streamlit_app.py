@@ -38,49 +38,43 @@ class StreamlitDashboard:
         st.markdown("""
         <style>
         .main-header {
-            background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             padding: 1rem;
-            border-radius: 10px;
-            color: white;
+            border-radius: 8px;
+            color: #1a202c;
             text-align: center;
             margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         
         .website-capture-indicator {
-            background: linear-gradient(45deg, #059669, #10b981);
-            color: white;
+            background: #ffffff;
+            color: #2d3748;
             padding: 0.5rem;
-            border-radius: 5px;
+            border-radius: 6px;
             text-align: center;
-            animation: pulse 2s infinite;
+            border: 1px solid #48bb78;
+            border-left: 4px solid #48bb78;
         }
         
         .capture-card {
-            border: 2px solid #10b981;
-            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
             padding: 1rem;
             margin: 0.5rem 0;
-            background: linear-gradient(45deg, #f0fdf4, #ecfdf5);
+            background: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         
         .threat-alert {
-            background: #fef2f2;
-            border-left: 4px solid #ef4444;
+            background: #ffffff;
+            border: 1px solid #feb2b2;
+            border-left: 4px solid #f56565;
             padding: 1rem;
             border-radius: 8px;
             margin: 0.5rem 0;
-            animation: slideIn 0.5s ease-in;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(0); }
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         </style>
         """, unsafe_allow_html=True)
@@ -445,12 +439,14 @@ class StreamlitDashboard:
         if quantum_enabled:
             st.markdown("""
             <div style="
-                background: linear-gradient(45deg, #8b5cf6, #06b6d4);
-                color: white;
+                background: #ffffff;
+                color: #2d3748;
                 padding: 1rem;
-                border-radius: 10px;
+                border-radius: 8px;
                 text-align: center;
                 margin-bottom: 1rem;
+                border: 1px solid #e2e8f0;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             ">
                 <h3>🧬 Quantum Processing: LIVE</h3>
                 <p>Real-time quantum-enhanced threat detection active</p>
