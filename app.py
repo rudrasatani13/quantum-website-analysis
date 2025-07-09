@@ -21,6 +21,7 @@ import re
 from dotenv import load_dotenv
 import os
 import asyncio
+from quantum_detector import QuantumDetector
 
 load_dotenv(dotenv_path="/Users/apple/Desktop/qs-ai-ids-dashboard/.env")
 
