@@ -49,8 +49,8 @@ class AIDetector:
           },
           'privilege_escalation': {
               'patterns': [
-                  r'sudo', r'admin', r'root', r'privilege', r'escalate',
-                  r'permission', r'access.*denied', r'unauthorized'
+                  r'sudo', r'admin', r'root', 'privilege', 'escalate',
+                  'permission', 'access.*denied', 'unauthorized'
               ],
               'confidence_threshold': 0.6
           }
@@ -249,10 +249,10 @@ class AIDetector:
 
           # Check for statistical anomalies - Adjusted thresholds
           entropy = text_features.get('entropy', 0)
-          if entropy > 7.8:  # High entropy indicates potential encryption/obfuscation, increased from 7.5
+          if entropy > 8.0: # Increased from 7.8
               anomalies.append({
                   'type': 'high_entropy_anomaly',
-                  'confidence': min(1.0, entropy / 8.0),
+                  'confidence': min(1.0, entropy / 8.5), # Adjusted confidence scaling
                   'detection_method': 'isolation_forest',
                   'severity': 'medium',
                   'description': f'High entropy content detected (entropy: {entropy:.2f})',
@@ -261,10 +261,10 @@ class AIDetector:
 
           # Check for unusual character distributions - Adjusted thresholds
           special_char_ratio = text_features.get('special_char_ratio', 0)
-          if special_char_ratio > 0.4: # Increased from 0.3
+          if special_char_ratio > 0.45: # Increased from 0.4
               anomalies.append({
                   'type': 'unusual_character_distribution',
-                  'confidence': min(1.0, special_char_ratio * 2),
+                  'confidence': min(1.0, special_char_ratio * 1.8), # Adjusted confidence scaling
                   'detection_method': 'isolation_forest',
                   'severity': 'low',
                   'description': f'Unusual character distribution (special chars: {special_char_ratio:.1%})',
@@ -275,10 +275,10 @@ class AIDetector:
           behavioral_features = features.get('behavioral_features', {})
           base64_patterns = behavioral_features.get('base64_patterns', 0)
 
-          if base64_patterns > 15: # Increased from 5
+          if base64_patterns > 20: # Increased from 15
               anomalies.append({
                   'type': 'excessive_encoding_patterns',
-                  'confidence': min(1.0, base64_patterns / 20), # Adjusted confidence scaling
+                  'confidence': min(1.0, base64_patterns / 25), # Adjusted confidence scaling
                   'detection_method': 'isolation_forest',
                   'severity': 'medium',
                   'description': f'Excessive encoding patterns detected ({base64_patterns} base64 patterns)',
@@ -298,7 +298,7 @@ class AIDetector:
           # Advanced pattern matching
           advanced_patterns = {
               # Adjusted confidence for obfuscated_javascript to be less sensitive
-              'obfuscated_javascript': {'pattern': r'eval\s*\(\s*(?:unescape|atob|String\.fromCharCode)', 'base_confidence': 0.3}, # Reduced base confidence
+              'obfuscated_javascript': {'pattern': r'eval\s*\(\s*(?:unescape|atob|String\.fromCharCode)', 'base_confidence': 0.1}, # Reduced base confidence
               'sql_injection_advanced': {'pattern': r'(?:union|select|insert|update|delete|drop)\s+(?:all\s+)?(?:distinct\s+)?(?:\w+\s*,?\s*)*(?:from|into|table)', 'base_confidence': 0.7},
               'command_injection_advanced': {'pattern': r'(?:;|\||&|`|\$\()\s*(?:cat|ls|pwd|whoami|id|uname|wget|curl|nc|netcat)', 'base_confidence': 0.7},
               'xss_advanced': {'pattern': r'<(?:script|iframe|object|embed|form)[^>]*(?:src|action)\s*=\s*["\']?(?:javascript:|data:|vbscript:)', 'base_confidence': 0.6},
@@ -316,7 +316,7 @@ class AIDetector:
 
               if match_list:
                   # Confidence now scales based on base_confidence and match count
-                  confidence = min(1.0, base_confidence + (len(match_list) * 0.1))
+                  confidence = min(1.0, pattern_info['base_confidence'] + (len(match_list) * 0.05))
 
                   pattern_matches.append({
                       'type': f'pattern_match_{pattern_name}',

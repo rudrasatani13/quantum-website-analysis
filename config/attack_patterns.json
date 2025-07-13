@@ -1,89 +1,40 @@
 {
+  "sql_injection": {
+    "malicious_patterns": [
+      "\\b(ALTER|CREATE|DELETE|DROP|EXEC|INSERT|MERGE|SELECT|UPDATE|UNION ALL)\\b",
+      "'(?:--|;)"
+    ],
+    "severity_weight": 0.9,
+    "legitimate_indicators": ["'s", "example", "documentation"],
+    "confidence_multiplier": 2.5
+  },
   "xss": {
     "malicious_patterns": [
-      "<script\\b[^>]*>(.*?)<\\/script>",
-      "onerror\\s*=\\s*['\"].*?['\"]",
-      "alert\\s*\\(",
-      "document\\.cookie",
-      "eval\\s*\\("
+      "<script.*?>\\s*(alert\\(|document\\.cookie|eval\\(|window\\.location)",
+      "onerror\\s*=\\s*['\"].*?alert\\(.*?['\"]",
+      "<iframe\\s+src\\s*=\\s*['\"]?javascript:alert\\(1\\)['\"]?>"
     ],
     "severity_weight": 0.8,
     "legitimate_indicators": ["cdn", "jquery", "analytics", "react", "vue"],
     "confidence_multiplier": 2
   },
-
-  "sql_injection": {
+  "path_traversal": {
     "malicious_patterns": [
-      "(['\"]).*?\\s*(UNION|SELECT|INSERT|UPDATE|DELETE|DROP)\\s+.*?\\1",
-      "(--|#).*$",
-      "\\bOR\\b\\s+1=1",
-      "\\bAND\\b\\s+\\d+=\\d+"
-    ],
-    "severity_weight": 0.9,
-    "legitimate_indicators": ["order by", "group by"],
-    "confidence_multiplier": 3
-  },
-
-  "lfi": {
-    "malicious_patterns": [
-      "\\.\\.\\/\\.\\.\\/",
-      "\\/etc\\/passwd",
-      "phpinfo\\s*\\("
+      "\\.\\./",
+      "\\.\\.\\\\"
     ],
     "severity_weight": 0.7,
-    "legitimate_indicators": [],
-    "confidence_multiplier": 2
+    "legitimate_indicators": ["path/to/your/file", "example/path"],
+    "confidence_multiplier": 1.8
   },
-
-  "rfi": {
-    "malicious_patterns": [
-      "(http|https|ftp):\\/\\/[^\\s]+",
-      "include\\s*['\"].*?['\"]"
-    ],
-    "severity_weight": 0.7,
-    "legitimate_indicators": ["cdnjs", "maxcdn", "stackpath"],
-    "confidence_multiplier": 2
-  },
-
-  "ssrf": {
-    "malicious_patterns": [
-      "(http|https|ftp):\\/\\/127\\.0\\.0\\.[0-9]+",
-      "(http|https|ftp):\\/\\/localhost",
-      "(http|https|ftp):\\/\\/[0-9]{1,3}(\\.[0-9]{1,3}){3}"
-    ],
-    "severity_weight": 0.85,
-    "legitimate_indicators": ["example.com", "trustedproxy.com"],
-    "confidence_multiplier": 2
-  },
-
   "command_injection": {
     "malicious_patterns": [
-      ";\\s*(ls|cat|pwd|whoami)",
-      "\\|\\s*(ls|cat|grep)",
-      "`(.*?)`"
+      ";\\s*(ls|dir|cat|echo|rm|del|whoami|ifconfig|ipconfig|netcat|nc)",
+      "&&\\s*(ls|dir|cat|echo|rm|del|whoami|ifconfig|ipconfig|netcat|nc)",
+      "\\|\\s*(ls|dir|cat|echo|rm|del|whoami|ifconfig|ipconfig|netcat|nc)"
     ],
-    "severity_weight": 0.9,
-    "legitimate_indicators": [],
+    "severity_weight": 1.0,
+    "legitimate_indicators": ["example command", "tutorial"],
     "confidence_multiplier": 3
-  },
-
-  "open_redirect": {
-    "malicious_patterns": [
-      "redirect\\s*=\\s*['\"]?http",
-      "url=http"
-    ],
-    "severity_weight": 0.6,
-    "legitimate_indicators": [],
-    "confidence_multiplier": 2
-  },
-
-  "csrf": {
-    "malicious_patterns": [
-      "<form[^>]*action=[^>]*method=['\"]?GET['\"]?",
-      "csrf_token\\s*==?\\s*['\"]?"
-    ],
-    "severity_weight": 0.5,
-    "legitimate_indicators": [],
-    "confidence_multiplier": 2
   }
 }
