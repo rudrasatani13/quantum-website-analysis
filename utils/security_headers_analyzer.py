@@ -25,7 +25,8 @@ class SecurityHeadersAnalyzer:
                 'description': 'Enforces HTTPS usage',
                 'recommendation': 'Add Strict-Transport-Security header with max-age at least 31536000',
                 'severity': 'HIGH',
-                'valid_values': ['max-age=31536000', 'max-age=31536000; includeSubDomains']
+                # Added more flexible valid_values for HSTS
+                'valid_values': ['max-age=31536000', 'max-age=31536000; includeSubDomains', 'max-age=86400']
             },
             'content-security-policy': {
                 'description': 'Controls resources the user agent is allowed to load',
@@ -67,6 +68,7 @@ class SecurityHeadersAnalyzer:
                     'severity': data['severity'],
                     'recommendation': data['recommendation']
                 })
+            # Check if header is present but its value is not in valid_values (if valid_values are defined)
             elif data['valid_values'] and not any(val in headers_lower[header] for val in data['valid_values']):
                 results['invalid_headers'].append({
                     'header': header,
@@ -76,8 +78,14 @@ class SecurityHeadersAnalyzer:
 
         # Calculate score
         total_headers = len(self.security_headers_database)
-        valid_headers = total_headers - len(results['missing_headers']) - len(results['invalid_headers'])
-        results['score'] = valid_headers / total_headers
+        # Count headers that are present AND valid
+        valid_headers_count = 0
+        for header, data in self.security_headers_database.items():
+            if header in headers_lower:
+                if not data['valid_values'] or any(val in headers_lower[header] for val in data['valid_values']):
+                    valid_headers_count += 1
+
+        results['score'] = valid_headers_count / total_headers if total_headers > 0 else 0.0
 
         # Generate recommendations
         for header in results['missing_headers']:

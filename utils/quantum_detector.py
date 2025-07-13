@@ -3,12 +3,14 @@ from typing import Optional, Literal
 
 # Qiskit imports
 try:
-    from qiskit import Aer, QuantumCircuit, execute
-    from qiskit.utils import QuantumInstance
+    from qiskit import Aer, QuantumCircuit
+    from qiskit.primitives import Sampler
     from qiskit_machine_learning.kernels import QuantumKernel
     from qiskit_machine_learning.algorithms import QSVC
+    from qiskit_ibm_provider import IBMProvider
     _qiskit_available = True
-except ImportError:
+except ImportError as e:
+    print(f"Qiskit import error: {e}")
     _qiskit_available = False
 
 # PennyLane imports
@@ -16,7 +18,8 @@ try:
     import pennylane as qml
     from pennylane import numpy as pnp
     _pennylane_available = True
-except ImportError:
+except ImportError as e:
+    print(f"PennyLane import error: {e}")
     _pennylane_available = False
 
 class QuantumDetector:
@@ -44,10 +47,13 @@ class QuantumDetector:
             if not _qiskit_available:
                 raise ImportError('Qiskit and Qiskit Machine Learning are not installed. Please install them to use the Qiskit backend.')
             if self.use_real_hardware:
-                from qiskit import IBMQ
-                IBMQ.load_account()
-                provider = IBMQ.get_provider(hub='ibm-q')
-                self.qiskit_backend = provider.get_backend(self.qiskit_backend_name)
+                try:
+                    # Use the new IBMProvider for real hardware
+                    provider = IBMProvider()
+                    self.qiskit_backend = provider.get_backend(self.qiskit_backend_name)
+                except Exception as e:
+                    print(f"Warning: Could not connect to IBM Quantum backend '{self.qiskit_backend_name}'. Falling back to AerSimulator. Error: {e}")
+                    self.qiskit_backend = Aer.get_backend(self.qiskit_backend_name)
             else:
                 self.qiskit_backend = Aer.get_backend(self.qiskit_backend_name)
         elif self.backend == 'pennylane':
@@ -74,6 +80,11 @@ class QuantumDetector:
         X: np.ndarray, shape (n_samples, n_features)
         Returns: np.ndarray, shape (n_samples,)
         """
+        if self.model is None and self.backend == 'qiskit':
+            raise ValueError('Qiskit model has not been fit yet.')
+        if (self.circuit is None or self.W is None) and self.backend == 'pennylane':
+            raise ValueError('PennyLane model has not been fit yet.')
+
         if self.backend == 'qiskit':
             return self._predict_qiskit(X)
         elif self.backend == 'pennylane':
@@ -86,7 +97,9 @@ class QuantumDetector:
         feature_map = QuantumCircuit(self.n_qubits)
         for i in range(self.n_qubits):
             feature_map.h(i)
-        quantum_kernel = QuantumKernel(feature_map=feature_map, quantum_instance=QuantumInstance(self.qiskit_backend))
+        # QuantumInstance is deprecated in Qiskit 1.0+. Use Sampler.
+        sampler = Sampler()
+        quantum_kernel = QuantumKernel(feature_map=feature_map, sampler=sampler)
         self.model = QSVC(quantum_kernel=quantum_kernel)
         self.model.fit(X, y)
 
@@ -122,8 +135,11 @@ class QuantumDetector:
         def cost(W, X, Y):
             loss = 0
             for x, y in zip(X, Y):
+                # Ensure y is compatible with np.sign output (-1 or 1)
+                # Assuming y is 0 or 1, convert to -1 or 1
+                y_mapped = 2 * y - 1
                 pred = np.sign(np.sum(circuit(x, W)))
-                loss += (pred - y)**2
+                loss += (pred - y_mapped)**2
             return loss / len(X)
 
         W = 0.01 * np.random.randn(n_qubits, 3)
@@ -140,10 +156,6 @@ class QuantumDetector:
         preds = []
         for x in X:
             pred = np.sign(np.sum(self.circuit(x, self.W)))
-            preds.append(pred)
+            # Map -1, 1 back to 0, 1 if original labels were 0, 1
+            preds.append((pred + 1) / 2) # Assuming original labels were 0, 1
         return np.array(preds)
-
-# Example usage (to be removed or adapted for integration):
-# detector = QuantumDetector(backend='qiskit')
-# detector.fit(X_train, y_train)
-# y_pred = detector.predict(X_test)

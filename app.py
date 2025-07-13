@@ -22,7 +22,8 @@ from dotenv import load_dotenv
 import os
 import asyncio
 
-load_dotenv(dotenv_path="/Users/apple/Desktop/qs-ai-ids-dashboard/.env")
+# Load environment variables from .env file (assuming it's in the project root)
+load_dotenv()
 
 # Add project root to Python path
 PROJECT_ROOT = Path(__file__).parent.absolute()
@@ -1363,7 +1364,6 @@ def render_analysis_history():
                 st.metric("Legitimacy", f"{legitimacy_score:.1%}")
                 st.metric("Confidence", f"{confidence:.1%}")
                 st.write(f"**Risk Level:** {analysis.get('risk_level', 'Unknown')}")
-                # Replace lines 1526-1528 with this:
                 if advanced_analysis:
                     st.write(f"**🔍 Confidence:** {confidence:.1%}")
                     if advanced_analysis.get('context_enabled'):
