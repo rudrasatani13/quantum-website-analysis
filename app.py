@@ -444,242 +444,142 @@ st.set_page_config(
 # Replace the existing CSS section with this updated styling
 st.markdown("""
 <style>
-  /* Modern Color Palette */
+  /* --- Minimal High-Contrast Palette --- */
   :root {
-      --primary: #3a86ff;
-      --primary-light: #5e9dff;
-      --primary-dark: #2870e8;
-      --secondary: #4cc9f0;
-      --accent: #ff006e;
-      --success: #38b000;
-      --warning: #ffbe0b;
-      --danger: #ff5400;
-      --dark: #293241;
-      --light: #f8f9fa;
-      --gray: #adb5bd;
-      --card-bg: #ffffff;
-      --shadow: rgba(0, 0, 0, 0.05);
+      --primary: #212529;           /* A near-black as the primary "color" for maximum contrast */
+      --primary-light: #495057;      /* A lighter gray */
+      --primary-dark: #000000;       /* Black for hover states */
+      --secondary: #858f93;         /* Standard muted gray for secondary text */
+      --success: #5cb85c;         /* A calm, muted green */
+      --warning: #f0ad4e;         /* A calm, muted orange */
+      --danger: #d9534f;          /* A calm, muted red */
+      --dark: #f1f2f4;             /* The main text color */
+      --light: #495969;            /* A very light gray for page background */
+      --card-bg: #404040;           /* Pure white for cards */
+      --border-color: #dee2e6;      /* A light, subtle border color */
+      --shadow: rgba(0, 0, 0, 0.05); /* A very subtle shadow for depth */
   }
 
+  body {
+      color: var(--dark);
+  }
+  
   /* Base Styles */
   .main-header {
-      background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
-      padding: 2.5rem 2rem;
-      border-radius: 16px;
+      background: var(--primary);
+      padding: 2rem 1.5rem;
+      border-radius: 8px;
       color: white;
       text-align: center;
       margin-bottom: 2rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       border: none;
-      transition: all 0.3s ease;
-  }
-
-  .main-header:hover {
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
-      transform: translateY(-2px);
   }
 
   /* Card Styles */
-  .advanced-header {
-      background: linear-gradient(135deg, #ffffff 0%, #f2f7ff 100%);
-      border: none;
-      border-radius: 16px;
-      padding: 1.8rem;
-      color: var(--dark);
-      text-align: center;
-      margin: 1.5rem 0;
-      box-shadow: 0 8px 30px var(--shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .advanced-header:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-  }
-
   .threat-card-advanced, .secure-card, .legitimate-card, .advanced-metrics, .metric-card {
       background: var(--card-bg);
-      border: none;
-      border-radius: 14px;
-      padding: 1.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
       margin: 1rem 0;
       color: var(--dark);
-      font-weight: 500;
-      box-shadow: 0 8px 30px var(--shadow);
-      transition: all 0.3s ease;
+      box-shadow: none;
+      transition: all 0.2s ease;
+  }
+  
+  .threat-card-advanced:hover, .secure-card:hover, .legitimate-card:hover {
+      border-color: #adb5bd;
   }
 
-  .threat-card-advanced:hover, .secure-card:hover, .legitimate-card:hover, .advanced-metrics:hover, .metric-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  .threat-card-high, .threat-card-medium, .threat-card-low {
+      border-left-width: 5px;
   }
-
+  
   .threat-card-high {
-      background: linear-gradient(to right, #fff1f1 0%, #ffffff 100%);
-      border: none;
-      border-left: 5px solid var(--danger);
-      border-radius: 14px;
-      padding: 1.8rem;
-      margin: 1rem 0;
-      color: var(--dark);
-      font-weight: 500;
-      box-shadow: 0 8px 30px var(--shadow);
-      transition: all 0.3s ease;
+      border-left-color: var(--danger);
   }
 
   .threat-card-medium {
-      background: linear-gradient(to right, #fff8eb 0%, #ffffff 100%);
-      border: none;
-      border-left: 5px solid var(--warning);
-      border-radius: 14px;
-      padding: 1.8rem;
-      margin: 1rem 0;
-      color: var(--dark);
-      font-weight: 500;
-      box-shadow: 0 8px 30px var(--shadow);
-      transition: all 0.3s ease;
+      border-left-color: var(--warning);
   }
 
   .threat-card-low {
-      background: linear-gradient(to right, #f0fff4 0%, #ffffff 100%);
-      border: none;
-      border-left: 5px solid var(--success);
-      border-radius: 14px;
-      padding: 1.8rem;
-      margin: 1rem 0;
-      color: var(--dark);
-      font-weight: 500;
-      box-shadow: 0 8px 30px var(--shadow);
-      transition: all 0.3s ease;
+      border-left-color: var(--success);
   }
-
-  .threat-card-high:hover, .threat-card-medium:hover, .threat-card-low:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-  }
-
+  
   .secure-card {
-      background: linear-gradient(to right, #f0fff4 0%, #ffffff 100%);
-      border: none;
       border-left: 5px solid var(--success);
   }
 
   .legitimate-card {
-      background: linear-gradient(to right, #f0f7ff 0%, #ffffff 100%);
-      border: none;
-      border-left: 5px solid var(--primary);
-  }
-
-  /* Badge Styles */
-  .universal-badge, .advanced-badge, .legitimacy-badge {
-      background: var(--primary);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 30px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      display: inline-block;
-      margin: 0.25rem;
-      box-shadow: 0 4px 10px rgba(58, 134, 255, 0.2);
-      transition: all 0.2s ease;
-  }
-
-  .universal-badge:hover, .advanced-badge:hover, .legitimacy-badge:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(58, 134, 255, 0.25);
+      border-left: 5px solid var(--secondary);
   }
 
   /* Button Styles */
   .stButton > button {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+      background-color: var(--primary) !important;
       color: white !important;
-      border: none !important;
-      border-radius: 30px !important;
-      padding: 0.7rem 1.5rem !important;
+      border: 1px solid var(--primary) !important;
+      border-radius: 8px !important;
+      padding: 0.5rem 1.25rem !important;
       font-weight: 500 !important;
-      transition: all 0.3s ease !important;
-      box-shadow: 0 4px 12px rgba(58, 134, 255, 0.25) !important;
-      text-transform: uppercase !important;
-      letter-spacing: 0.5px !important;
+      transition: all 0.2s ease !important;
+      box-shadow: none !important;
+      text-transform: none !important;
+      letter-spacing: 0px !important;
   }
 
   .stButton > button:hover {
-      transform: translateY(-2px) !important;
-      box-shadow: 0 6px 16px rgba(58, 134, 255, 0.35) !important;
+      background-color: var(--primary-dark) !important;
+      border-color: var(--primary-dark) !important;
+      transform: none !important;
+      box-shadow: none !important;
+  }
+  
+  /* Input & Selectbox Styles */
+  .stTextInput > div > div > input, .stSelectbox > div > div > div {
+      border-radius: 8px !important;
+      border: 1px solid var(--border-color) !important;
+      padding: 0.75rem !important;
+      box-shadow: none !important;
   }
 
-  .stButton > button:active {
-      transform: translateY(1px) !important;
-      box-shadow: 0 2px 8px rgba(58, 134, 255, 0.2) !important;
-  }
-
-  /* Input Styles */
-  .stTextInput > div > div > input {
-      border-radius: 12px !important;
-      border: 1px solid #e2e8f0 !important;
-      padding: 0.8rem !important;
-      transition: all 0.3s ease !important;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
-  }
-
-  .stTextInput > div > div > input:focus {
+  .stTextInput > div > div > input:focus, .stSelectbox > div > div > div:focus-within {
       border-color: var(--primary) !important;
-      box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.15) !important;
-      transform: translateY(-1px) !important;
-  }
-
-  /* Selectbox Styles */
-  .stSelectbox > div > div > div {
-      border-radius: 12px !important;
-      border: 1px solid #e2e8f0 !important;
-      transition: all 0.3s ease !important;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
-  }
-
-  .stSelectbox > div > div > div:focus-within {
-      border-color: var(--primary) !important;
-      box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.15) !important;
-      transform: translateY(-1px) !important;
+      box-shadow: none !important;
   }
 
   /* Sidebar Styles */
   .css-1d391kg {
-      background: #f8f9fa !important;
-      border-right: none !important;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.05) !important;
+      background: var(--card-bg) !important;
+      border-right: 1px solid var(--border-color) !important;
+      box-shadow: none !important;
   }
 
   /* Progress Bar */
   .stProgress > div > div > div {
-      background: linear-gradient(to right, var(--primary), var(--secondary)) !important;
-      border-radius: 30px !important;
-      height: 8px !important;
+      background: var(--primary) !important;
+      border-radius: 8px !important;
   }
 
   /* Expander */
   .streamlit-expanderHeader {
-      background: #f8f9fa !important;
-      border-radius: 12px !important;
-      transition: all 0.3s ease !important;
+      background: var(--light) !important;
+      border-radius: 8px !important;
+      border: 1px solid var(--border-color);
   }
-
-  .streamlit-expanderHeader:hover {
-      background: #f0f3f5 !important;
-      transform: translateX(3px) !important;
-  }
-
-  /* Metric */
+  
+  /* Metric - Ensures all metric values are dark gray/black for readability */
   [data-testid="stMetricValue"] {
-      font-size: 2rem !important;
+      font-size: 1.8rem !important;
       font-weight: 600 !important;
-      color: var(--primary) !important;
+      color: var(--dark) !important; 
   }
 
   [data-testid="stMetricLabel"] {
-      font-size: 1rem !important;
-      font-weight: 500 !important;
-      color: var(--dark) !important;
+      font-size: 0.95rem !important;
+      font-weight: 400 !important;
+      color: var(--secondary) !important;
   }
 </style>
 """, unsafe_allow_html=True)
@@ -740,7 +640,7 @@ def main():
   <div class="main-header">
       <h1 style="margin: 0; font-size: 2.2rem; font-weight: 700;">Quantum-Safe Intrusion Detection System</h1>
       <p style="margin: 0.5rem 0 0 0; font-size: 1.1rem; font-weight: 400; opacity: 0.9;">
-          Advanced security analysis powered by context-aware algorithms
+          Advanced security analysis powered by Quantum-ML algorithms
       </p>
   </div>
   """, unsafe_allow_html=True)
@@ -757,7 +657,7 @@ def main():
       st.markdown("""
       <div class="advanced-metrics">
           <h4>🔍 Analysis Status</h4>
-          <p>Advanced context-aware analysis active</p>
+          <p>Advanced Quantum-ML analysis active</p>
       </div>
       """, unsafe_allow_html=True)
 
@@ -765,7 +665,7 @@ def main():
       st.markdown("### 🗺️ Navigation")
 
       page_options = {
-          "🔍 Advanced Website Scanner": "Analyze websites with context-aware algorithms",
+          "🔍 Advanced Website Scanner": "Analyze websites with Quantum-ML algorithms",
           "📡 Network Traffic Analyzer": "Monitor and analyze network traffic for threats",
           "📊 Threat Dashboard": "View threat statistics and analytics",
           "📋 Analysis History": "Review past website security analyses",
@@ -831,26 +731,26 @@ def main():
 def render_advanced_website_scanner():
   """Advanced context-aware website security scanner"""
 
-  # Enhanced info section
+  # Replace the existing info section with this one
   st.markdown("""
-      <div style="background: #ffffff;
+      <div style="background: #f8f9fa;
+                  border: 1px solid #dee2e6;
                   padding: 1.5rem;
-                  border-radius: 16px;
-                  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+                  border-radius: 8px;
                   margin: 1rem 0 2rem 0;">
-          <h3 style="color: #3a86ff; font-weight: 600; margin-bottom: 1rem; font-size: 1.3rem;">
-              🔍 How Context-Aware Analysis Works
+          <h3 style="color: #212529; font-weight: 600; margin-bottom: 1rem; font-size: 1.3rem;">
+              🔍 How Quantum-ML Analysis Works
           </h3>
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-              <div style="background: #e6f0ff; padding: 0.5rem; border-radius: 8px; font-weight: 500;">Context Analysis</div>
-              <div style="color: #718096;">→</div>
-              <div style="background: #e6f0ff; padding: 0.5rem; border-radius: 8px; font-weight: 500;">Pattern Recognition</div>
-              <div style="color: #718096;">→</div>
-              <div style="background: #e6f0ff; padding: 0.5rem; border-radius: 8px; font-weight: 500;">Threat Detection</div>
-              <div style="color: #718096;">→</div>
-              <div style="background: #e6f0ff; padding: 0.5rem; border-radius: 8px; font-weight: 500;">Security Score</div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <div style="background: #e9ecef; color: #212529; padding: 0.5rem 0.75rem; border-radius: 6px; font-weight: 500;">Quantum-ML Analysis</div>
+              <div style="color: #6c757d;">→</div>
+              <div style="background: #e9ecef; color: #212529; padding: 0.5rem 0.75rem; border-radius: 6px; font-weight: 500;">Pattern Recognition</div>
+              <div style="color: #6c757d;">→</div>
+              <div style="background: #e9ecef; color: #212529; padding: 0.5rem 0.75rem; border-radius: 6px; font-weight: 500;">Threat Detection</div>
+              <div style="color: #6c757d;">→</div>
+              <div style="background: #e9ecef; color: #212529; padding: 0.5rem 0.75rem; border-radius: 6px; font-weight: 500;">Security Score</div>
           </div>
-          <p style="margin: 0.5rem 0 0 0; color: #2d3748;">
+          <p style="margin: 1rem 0 0 0; color: #495057;">
               Our system analyzes websites in context, distinguishing between legitimate content and security threats with high precision.
           </p>
       </div>
@@ -858,7 +758,7 @@ def render_advanced_website_scanner():
 
   # Enhanced website analysis section
   st.markdown("### 🔍 Website Security Analysis")
-  st.markdown("Enter any website URL to perform comprehensive security analysis using context-aware algorithms.")
+  st.markdown("Enter any website URL to perform comprehensive security analysis using Quantum-ML algorithms.")
 
   col1, col2 = st.columns([4, 1])
 
@@ -875,7 +775,7 @@ def render_advanced_website_scanner():
   # Enhanced website testing section with better organization
   st.markdown("---")
   st.markdown("### 🧪 Quick Test Gallery")
-  st.markdown("Test the scanner with different types of websites to see the context-aware analysis in action:")
+  st.markdown("Test the scanner with different types of websites to see the Quantum-ML analysis in action:")
 
   # Organized test buttons with categories
   test_categories = {
